@@ -1,0 +1,95 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= page_title %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="table-reponsive">
+      <section class="bg-light">
+        <div class="container">
+          <div class="row">
+            <table class="table table-stripped">
+              <thead>
+                <tr>
+                  <td>id</td>
+                  <td>name</td>
+                  <td>email</td>
+                  <td>age</td>
+                  <td>role</td>
+                  <td>actions</td>
+                </tr>
+              </thead>
+              <tbody>
+                <% users.forEach(user => { %>
+                  <tr>
+                    <td><%= user.id %></td>
+                    <td><%= user.name %></td>
+                    <td><%= user.email %></td>
+                    <td><%= user.age %></td>
+                    <td><%= user.role %></td>
+                    <td><button class="btn-close" onclick="deleteUser(<%= user.id %>)"></button></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="container">
+      <form method="POST" action="/api/users">
+      <div class="form-group">
+              <label for="usernameInput">Username:</label>
+              <input type="text" class="form-control" id="usernameInput" placeholder="Enter your username" name="username">
+      </div>
+      <div class="form-group">
+              <label for="passwordInput">Password:</label>
+              <input type="password" class="form-control" id="passwordInput" placeholder="Enter your password" name="password">
+      </div>
+        <div class="form-group">
+          <label for="ageInput">Age:</label>
+          <input type="number" class="form-control" id="ageInput" placeholder="Enter your age" name="age">
+        </div>
+        <div class="form-group">
+          <label for="emailInput">Email:</label>
+          <input type="email" class="form-control" id="emailInput" placeholder="Enter your email" name="email">
+        </div>
+        
+        <div class="form-group">
+          <label for="roleSelect">Role:</label>
+          <select class="form-control" id="roleSelect" name="role">
+            <option value="admin">Admin</option>
+            <option value="editor">Editor</option>
+            <option value="user">User</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+</div>
+    <script>
+      function deleteUser(id) {
+        const deleteReq = fetch("/api/users/"+id, {method: "DELETE"})
+        deleteReq
+          .then((response) => {
+            return response.json()
+          }).then((data) => {
+            console.log(data);
+            alert(data.msg);
+            if (confirm("Press OK to continue.")) {
+              location.reload();
+            }
+          }).catch(err => {
+            alert(err.message);
+            if (confirm("Press OK to continue.")) {
+              location.reload();
+            }
+          });
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
